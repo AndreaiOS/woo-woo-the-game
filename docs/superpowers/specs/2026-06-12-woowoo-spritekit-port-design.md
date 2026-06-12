@@ -13,7 +13,8 @@ Non è un aggiornamento incrementale: Cocos2D-iPhone è abbandonato dal ~2017 e 
 
 - ~6.150 righe di Objective-C in 16 classi (`Woo Woo The Game/Classes/`)
 - Engine: Cocos2D-iPhone 3.x via SpriteBuilder, fisica Chipmunk, audio ObjectAL, rendering OpenGL ES
-- Target: iOS 7.0, design per schermi iPhone 5 (16:9), portrait, solo iPhone
+- Target: iOS 7.0, design per schermi iPhone 5 (16:9), solo iPhone
+- **Orientamento: landscape** (design 568×320 pt; verificato dalle dimensioni degli asset 1136×640 e dalla mappatura accelerometro che usa `acceleration.y` per il movimento orizzontale)
 - Bundle id: `com.woowoothegame`
 - Dipendenze morte: Google Analytics "GAI" (servizio spento da Google), AdMob SDK ~2014
 - Due modalità di gioco:
@@ -49,7 +50,7 @@ Woo Woo The Game/            ← repo git (baseline 2014 committata)
 - **SwiftUI** `@main App` con `SpriteView` a schermo pieno (ignora safe area a livello di view; è il contenuto a rispettarla dove serve)
 - Le scene SpriteKit si rimpiazzano tra loro con `SKView.presentScene` — stessa architettura di `CCDirector replaceScene` dell'originale
 - Ponti UIKit (`UIViewControllerRepresentable`) solo per: fotocamera (selfie) e pannello Game Center
-- **Target: iOS 17+**, solo iPhone, portrait
+- **Target: iOS 17+**, solo iPhone, **landscape** (come l'originale)
 
 ### Mappa dei componenti
 
@@ -98,9 +99,9 @@ Stesse chiavi dell'originale, così i salvataggi esistenti sopravvivono al porti
 
 ### Schermi moderni
 
-- Altezza logica di design fissa (pari al design originale); la larghezza si estende sui display 19.5:9
-- Sfondi a copertura piena dello schermo
-- HUD (punteggio, timer, pausa) ancorato alla **safe area** — mai sotto notch/Dynamic Island
+- Altezza logica di design fissa a **320 pt** (il design originale iPhone 5 landscape era 568×320); la larghezza si estende sui display 19.5:9 (~693 pt)
+- Sfondi scalati a copertura piena della larghezza (terrazzo ancorato in basso, cielo pieno)
+- In landscape il notch/Dynamic Island è laterale: i bottoni vicini ai bordi sinistro/destro vengono spostati dentro la **safe area laterale**; HUD in alto invariato
 - Spawn e limiti di movimento calcolati sulle dimensioni reali della scena, non hardcoded
 
 ### Asset
