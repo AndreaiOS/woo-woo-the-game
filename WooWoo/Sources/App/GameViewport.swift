@@ -11,7 +11,7 @@ struct GameViewport: UIViewRepresentable {
 final class GameHostView: SKView {
     override func layoutSubviews() {
         super.layoutSubviews()
-        guard scene == nil, bounds.width > 0 else { return }
+        guard scene == nil, bounds.width > 0, bounds.height > 0 else { return }
         ignoresSiblingOrder = false  // l'originale si affida all'ordine di addChild
         let intro = IntroScene(size: GameHostView.sceneSize(for: bounds.size))
         intro.scaleMode = .aspectFill
