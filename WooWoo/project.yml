@@ -19,6 +19,7 @@ targets:
         SWIFT_VERSION: "6.0"
         CODE_SIGN_STYLE: Automatic
         SUPPORTED_INTERFACE_ORIENTATIONS: "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
   WooWooTests:
     type: bundle.unit-test
     platform: iOS
