@@ -1,0 +1,10 @@
+Musica titoli:
+
+Introduzione: intro.wav
+
+Soundtrack durante il gioco: main_theme.wav
+
+Rumore colpo:
+Rumore ingresso gabbiani: woowoo.wav
+Rumore attacco gabbiani: woowoo.wav
+Rumore morte:
