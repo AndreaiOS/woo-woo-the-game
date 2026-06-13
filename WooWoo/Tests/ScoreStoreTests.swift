@@ -9,6 +9,10 @@ final class ScoreStoreTests: XCTestCase {
         defaults.removePersistentDomain(forName: #file + "score")
         store = ScoreStore(defaults: defaults)
     }
+    override func tearDown() {
+        defaults.removePersistentDomain(forName: #file + "score")
+        super.tearDown()
+    }
     func testBestUsesOriginalKeysPerMode() {
         store.setBest(42, for: .figlia)
         store.setBest(7, for: .mamma)
@@ -37,5 +41,7 @@ final class ScoreStoreTests: XCTestCase {
         XCTAssertEqual(store.gamesPlayed(for: .figlia), 0)
         XCTAssertEqual(store.totalPoints(for: .figlia), 0)
         XCTAssertEqual(store.best(for: .mamma), 5)
+        XCTAssertEqual(store.gamesPlayed(for: .mamma), 0)
+        XCTAssertEqual(store.totalPoints(for: .mamma), 0)
     }
 }

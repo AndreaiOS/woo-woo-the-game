@@ -7,19 +7,23 @@ final class SettingsTests: XCTestCase {
         defaults = UserDefaults(suiteName: #file)!
         defaults.removePersistentDomain(forName: #file)
     }
+    override func tearDown() {
+        defaults.removePersistentDomain(forName: #file)
+        super.tearDown()
+    }
     func testDefaultsToOffLikeOriginalIntZero() {
         let s = Settings(defaults: defaults)
         XCTAssertFalse(s.isAudioOn)  // chiave "audio" assente → 0 → off
     }
     func testTogglePersistsAsIntOnOriginalKeys() {
-        var s = Settings(defaults: defaults)
+        let s = Settings(defaults: defaults)
         s.isAudioOn = true; s.isSoundOn = true; s.isVibroOn = false
         XCTAssertEqual(defaults.integer(forKey: "audio"), 1)
         XCTAssertEqual(defaults.integer(forKey: "sound"), 1)
         XCTAssertEqual(defaults.integer(forKey: "vibro"), 0)
     }
     func testFirstTime() {
-        var s = Settings(defaults: defaults)
+        let s = Settings(defaults: defaults)
         XCTAssertTrue(s.isFirstTime)            // "first" == 0 → prima volta
         s.markFirstTimeDone()
         XCTAssertFalse(s.isFirstTime)
