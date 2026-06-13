@@ -17,9 +17,8 @@ final class GameCenterService {
     func authenticate() {
         GKLocalPlayer.local.authenticateHandler = { viewController, error in
             if let viewController {
-                // GKLocalPlayer.authenticateHandler può chiamarsi su thread non-main in
-                // alcuni path: usiamo MainActor.assumeIsolated per presentare la UI.
-                MainActor.assumeIsolated {
+                // authenticateHandler può essere chiamato off-main: dispatch esplicito sul main actor
+                Task { @MainActor [viewController] in
                     Self.rootViewController?.present(viewController, animated: false)
                 }
             }
