@@ -26,10 +26,10 @@ imageset() {  # $1 = nome imageset, $2 = file 2x, [$3 = file 1x]
 }
 
 # 1. Sprites di animazione: tutte le sottocartelle di sprites/, solo i file -hd
-find "$LEGACY/sprites" -name '*-hd.png' | while read -r f; do
+while read -r f; do
   base="$(basename "$f" -hd.png)"
   imageset "$base" "$f"
-done
+done < <(find "$LEGACY/sprites" -name '*-hd.png')
 
 # 2. GamePlay: preferisci -iphone5hd, fallback -hd
 for f in "$LEGACY/GamePlay/"*-iphone5hd.png; do
@@ -45,7 +45,9 @@ done
 # 3. Pulsanti: -hd come 2x; senza -hd come 2x singolo
 for f in "$LEGACY/pulsanti/"*-hd.png; do
   [[ -e "$f" ]] || continue
-  imageset "$(basename "$f" -hd.png)" "$f"
+  base="$(basename "$f" -hd.png)"
+  [[ "$base" == "btn_label" ]] && continue   # gestito sotto via root @2x
+  imageset "$base" "$f"
 done
 for f in "$LEGACY/pulsanti/"*.png; do
   [[ -e "$f" ]] || continue
@@ -70,6 +72,7 @@ imageset "spada" "$LEGACY/spada.png"
 imageset "riga_pattern" "$LEGACY/riga_pattern.png"
 
 # 5. Audio e font
+# Soundlist.txt escluso di proposito (manifest dev, non asset)
 cp "$LEGACY/audio/"*.mp3 Resources/Audio/
 cp "$LEGACY/fonts/"*.ttf Resources/Fonts/
 
@@ -81,4 +84,4 @@ cat > "$OUT/AppIcon.appiconset/Contents.json" <<'EOF'
   "info": { "author": "xcode", "version": 1 } }
 EOF
 
-echo "Imageset generati: $(ls "$OUT" | wc -l)"
+echo "Imageset generati: $(ls -d "$OUT"/*.imageset 2>/dev/null | wc -l | tr -d ' ') (+ AppIcon)"

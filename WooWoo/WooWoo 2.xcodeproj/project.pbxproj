@@ -1,0 +1,414 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		189BEF070E68549B9C797392 /* IntroScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5657B4BC70C12B0837CFA39D /* IntroScene.swift */; };
+		59235DD7D30879EBDA9FFCD5 /* SmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9385CB9476F1578DD29A2D7C /* SmokeTests.swift */; };
+		613D1AF7FCC833AEE356FDCC /* GameViewport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1AB9C343C9144DB246D92D /* GameViewport.swift */; };
+		96AAB70C8C267D33FC556427 /* WooWooApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF1964DA3F23F99DB837DA5 /* WooWooApp.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		08D627E7D425FF6EE84FDA40 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C44A9085DD94AF39051644CD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 88FE1FEFFD0B7647EF28C165;
+			remoteInfo = WooWoo;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		4FF1964DA3F23F99DB837DA5 /* WooWooApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WooWooApp.swift; sourceTree = "<group>"; };
+		5657B4BC70C12B0837CFA39D /* IntroScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroScene.swift; sourceTree = "<group>"; };
+		7F1AB9C343C9144DB246D92D /* GameViewport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewport.swift; sourceTree = "<group>"; };
+		91EB42AA51B61C11236CC2AE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		9385CB9476F1578DD29A2D7C /* SmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmokeTests.swift; sourceTree = "<group>"; };
+		9C91E8EF7E0A6A893AE6D726 /* WooWooTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = WooWooTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CBF4AEB1B77A8BC797C6D76C /* WooWoo.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = WooWoo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		132F7850F0FD3DA531B5CD5A /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				5657B4BC70C12B0837CFA39D /* IntroScene.swift */,
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
+		4A8911F39975418710652F2D /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				EEE7FE01B96268037AFD49B7 /* App */,
+				132F7850F0FD3DA531B5CD5A /* Scenes */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		5A1CB20F97221EAF4A731AAA /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				9385CB9476F1578DD29A2D7C /* SmokeTests.swift */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		6869FCB57E5C331CC57C0342 = {
+			isa = PBXGroup;
+			children = (
+				4A8911F39975418710652F2D /* Sources */,
+				5A1CB20F97221EAF4A731AAA /* Tests */,
+				EE16ADC668821BE544014135 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		EE16ADC668821BE544014135 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CBF4AEB1B77A8BC797C6D76C /* WooWoo.app */,
+				9C91E8EF7E0A6A893AE6D726 /* WooWooTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		EEE7FE01B96268037AFD49B7 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				7F1AB9C343C9144DB246D92D /* GameViewport.swift */,
+				91EB42AA51B61C11236CC2AE /* Info.plist */,
+				4FF1964DA3F23F99DB837DA5 /* WooWooApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		88FE1FEFFD0B7647EF28C165 /* WooWoo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5E22B25152AA68BAC42B0225 /* Build configuration list for PBXNativeTarget "WooWoo" */;
+			buildPhases = (
+				26C47E796C4EC88C325EAED7 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WooWoo;
+			packageProductDependencies = (
+			);
+			productName = WooWoo;
+			productReference = CBF4AEB1B77A8BC797C6D76C /* WooWoo.app */;
+			productType = "com.apple.product-type.application";
+		};
+		B12A47AB205927796EE29D46 /* WooWooTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 71391F7E60FA4F590C1E7B1D /* Build configuration list for PBXNativeTarget "WooWooTests" */;
+			buildPhases = (
+				A67E2E88308A56C80DEFD002 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2E3359C4187402A041457830 /* PBXTargetDependency */,
+			);
+			name = WooWooTests;
+			packageProductDependencies = (
+			);
+			productName = WooWooTests;
+			productReference = 9C91E8EF7E0A6A893AE6D726 /* WooWooTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C44A9085DD94AF39051644CD /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					88FE1FEFFD0B7647EF28C165 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = FC75C78261DE20F142007D67 /* Build configuration list for PBXProject "WooWoo" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 6869FCB57E5C331CC57C0342;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = EE16ADC668821BE544014135 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				88FE1FEFFD0B7647EF28C165 /* WooWoo */,
+				B12A47AB205927796EE29D46 /* WooWooTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		26C47E796C4EC88C325EAED7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				613D1AF7FCC833AEE356FDCC /* GameViewport.swift in Sources */,
+				189BEF070E68549B9C797392 /* IntroScene.swift in Sources */,
+				96AAB70C8C267D33FC556427 /* WooWooApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A67E2E88308A56C80DEFD002 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				59235DD7D30879EBDA9FFCD5 /* SmokeTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		2E3359C4187402A041457830 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 88FE1FEFFD0B7647EF28C165 /* WooWoo */;
+			targetProxy = 08D627E7D425FF6EE84FDA40 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		0055100560FC8B0EDB0FB18E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WooWoo.app/WooWoo";
+			};
+			name = Release;
+		};
+		2194205730B34E43211773FC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		44488778664B65B250DCE7C8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WooWoo.app/WooWoo";
+			};
+			name = Debug;
+		};
+		44FCF0CD4DEF08519274CD68 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = Sources/App/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.woowoothegame;
+				SDKROOT = iphoneos;
+				SUPPORTED_INTERFACE_ORIENTATIONS = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		9E6050B50FF9E5918FFFD316 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = Sources/App/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.woowoothegame;
+				SDKROOT = iphoneos;
+				SUPPORTED_INTERFACE_ORIENTATIONS = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		BE59A2424337F39A027CB69C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5E22B25152AA68BAC42B0225 /* Build configuration list for PBXNativeTarget "WooWoo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9E6050B50FF9E5918FFFD316 /* Debug */,
+				44FCF0CD4DEF08519274CD68 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		71391F7E60FA4F590C1E7B1D /* Build configuration list for PBXNativeTarget "WooWooTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				44488778664B65B250DCE7C8 /* Debug */,
+				0055100560FC8B0EDB0FB18E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		FC75C78261DE20F142007D67 /* Build configuration list for PBXProject "WooWoo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2194205730B34E43211773FC /* Debug */,
+				BE59A2424337F39A027CB69C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C44A9085DD94AF39051644CD /* Project object */;
+}
