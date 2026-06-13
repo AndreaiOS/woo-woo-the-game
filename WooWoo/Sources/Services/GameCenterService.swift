@@ -1,5 +1,9 @@
 import GameKit
 
+/// Pannello Game Center da mostrare — enum locale per evitare di esporre
+/// GKGameCenterViewControllerState (da header deprecato in iOS 26) nella firma pubblica.
+enum GameCenterPanel { case leaderboards, achievements }
+
 /// Game Center: auth (IntroScene.m:385-414), invio punteggi (GameOverScene.m:231-240,
 /// PunteggiScene.m:200-213), achievements (GameOverScene.m:242-319), pannello GC.
 /// Degrada con grazia: se non autenticato, ogni chiamata è un no-op (come l'originale).
@@ -19,7 +23,7 @@ final class GameCenterService {
             if let viewController {
                 // authenticateHandler può essere chiamato off-main: dispatch esplicito sul main actor
                 Task { @MainActor [viewController] in
-                    Self.rootViewController?.present(viewController, animated: false)
+                    Self.rootViewController?.present(viewController, animated: true)
                 }
             }
             if let error { print("GameCenter auth: \(error.localizedDescription)") }
@@ -47,15 +51,16 @@ final class GameCenterService {
     }
 
     /// Mostra il pannello Game Center.
-    /// `state == .leaderboards` → apre la classifica della modalità corrente.
-    /// Qualsiasi altro stato → apre lo stato richiesto (es. .achievements).
+    /// `.leaderboards` → apre la classifica della modalità corrente (iOS 18+) o default (iOS 17).
+    /// `.achievements` → apre il pannello achievements.
     /// iOS 26 SDK: usa GKAccessPoint invece di GKGameCenterViewController (deprecato).
     /// trigger(leaderboardID:playerScope:timeScope:) richiede iOS 18; su iOS 17 si
     /// ricade su trigger(state: .leaderboards) che mostra la classifica di default.
-    func showPanel(state: GKGameCenterViewControllerState, mode: GameMode) {
+    func showPanel(_ panel: GameCenterPanel, mode: GameMode) {
         guard isAuthenticated else { return }
         let ap = GKAccessPoint.shared
-        if state == .leaderboards {
+        switch panel {
+        case .leaderboards:
             if #available(iOS 18.0, *) {
                 // Apre direttamente la classifica della modalità corrente (iOS 18+)
                 ap.trigger(leaderboardID: mode.leaderboardID,
@@ -65,9 +70,9 @@ final class GameCenterService {
                 // Fallback iOS 17: mostra la lista leaderboard (trigger(state:) — iOS 14+)
                 ap.trigger(state: .leaderboards) {}
             }
-        } else {
+        case .achievements:
             // trigger(state:handler:) — iOS 14+
-            ap.trigger(state: state) {}
+            ap.trigger(state: .achievements) {}
         }
     }
 
