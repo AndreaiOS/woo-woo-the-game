@@ -23,7 +23,7 @@ final class GameCenterService {
             if let viewController {
                 // authenticateHandler può essere chiamato off-main: dispatch esplicito sul main actor
                 Task { @MainActor [viewController] in
-                    Self.rootViewController?.present(viewController, animated: true)
+                    UIApplication.shared.keyRootViewController?.present(viewController, animated: true)
                 }
             }
             if let error { print("GameCenter auth: \(error.localizedDescription)") }
@@ -74,13 +74,5 @@ final class GameCenterService {
             // trigger(state:handler:) — iOS 14+
             ap.trigger(state: .achievements) {}
         }
-    }
-
-    // MARK: - Root view controller helper (usato solo per auth viewController)
-
-    private static var rootViewController: UIViewController? {
-        UIApplication.shared.connectedScenes
-            .compactMap { ($0 as? UIWindowScene)?.keyWindow }
-            .first?.rootViewController
     }
 }

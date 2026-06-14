@@ -126,13 +126,6 @@ final class IntroScene: SKScene {
             : "Thank you for download!\nFollow us on Facebook:\nfb.com/woowoothegame\n\nCreated by:\nGiusepe Broccia and Davide Melis\n(Develop)\nfb.com/giudasoft\nRiccardo Atzeni (Graphics)\nAndrea Murru (Dewoolop iOS)\n\nThanks to Sensational Gianni music and ispiration\nfb.com/sensationalgianni"
         let alert = UIAlertController(title: nil, message: text, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
-        Self.rootViewController?.present(alert, animated: true)
-    }
-
-    /// Root view controller per presentare alert UIKit sopra la SKView.
-    private static var rootViewController: UIViewController? {
-        UIApplication.shared.connectedScenes
-            .compactMap { ($0 as? UIWindowScene)?.keyWindow }
-            .first?.rootViewController
+        UIApplication.shared.keyRootViewController?.present(alert, animated: true)
     }
 }
