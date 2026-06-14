@@ -18,7 +18,7 @@ final class GameScene: SKScene, @MainActor SKPhysicsContactDelegate {
     private var lifeBar: LifeBarNode!
     private let motionManager = CMMotionManager()
     private var playerVelocity = CGPoint.zero
-    private var comeEraGirato = true
+    private var comeEraGirato = false   // MyScene.h:36 — ivar BOOL zero-init = NO
     private var mostri = 0
     private var punteggio = 0
     private var colpiMostro = 0
@@ -144,6 +144,7 @@ final class GameScene: SKScene, @MainActor SKPhysicsContactDelegate {
     }
 
     private func startGameTimer() {
+        dispatchPrecondition(condition: .onQueue(.main))    // assumeIsolated sotto dipende da questo
         time = 0                                            // :859
         // Il blocco del Timer è @Sendable ma tocca stato @MainActor (time, timeLabel).
         // Aggiungendolo al RunLoop *corrente* (main, siamo in countDown sul main actor) il fire
