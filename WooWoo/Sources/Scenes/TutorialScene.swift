@@ -54,7 +54,7 @@ final class TutorialScene: SKScene {
         guard monoMovimento, let t = touches.first else { return }
         // :130-137 — movimento = vecchiaX - nuovaX; >0 ⇒ swipe verso sinistra (avanza).
         let movimento = t.previousLocation(in: self).x - t.location(in: self).x
-        if movimento > 0, pagina < 6 {                       // :143-153
+        if movimento > 0, pagina < 5 {                       // :143-153 (pagine 1-5; la 5 avvia il gioco, no overshoot)
             pagina += 1
             gestisciPagina(pagina)
         }

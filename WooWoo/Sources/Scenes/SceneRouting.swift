@@ -1,4 +1,5 @@
 import SpriteKit
+import ObjectiveC
 
 /// Le tre transizioni usate dall'originale.
 enum SceneTransition {
@@ -15,9 +16,21 @@ enum SceneTransition {
     }
 }
 
+private nonisolated(unsafe) var isTransitioningKey: UInt8 = 0
+
 extension SKScene {
-    /// Sostituisce [[CCDirector sharedDirector] replaceScene:withTransition:]
+    private var isTransitioning: Bool {
+        get { (objc_getAssociatedObject(self, &isTransitioningKey) as? Bool) ?? false }
+        set { objc_setAssociatedObject(self, &isTransitioningKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+    }
+
+    /// Sostituisce [[CCDirector sharedDirector] replaceScene:withTransition:].
+    /// Idempotente: una volta avviata la transizione, ulteriori chiamate dalla stessa
+    /// scena uscente sono ignorate (presentScene non è sincrono come replaceScene,
+    /// la scena uscente resta interattiva durante la transizione → evita doppie presentazioni).
     func go(to scene: SKScene, _ transition: SceneTransition) {
+        guard !isTransitioning else { return }
+        isTransitioning = true
         scene.scaleMode = .aspectFill
         view?.presentScene(scene, transition: transition.skTransition)
     }
