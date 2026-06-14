@@ -26,8 +26,11 @@ extension SKScene {
     /// Clamp X dentro la safe area laterale (notch in landscape) per i bottoni ai bordi.
     func safeX(_ x: CGFloat) -> CGFloat {
         guard let view else { return x }
-        let insetL = view.safeAreaInsets.left * (size.height / view.bounds.height)
-        let insetR = view.safeAreaInsets.right * (size.height / view.bounds.height)
+        // La scena preserva esattamente l'aspect del device (GameHostView.sceneSize),
+        // quindi il fattore pt→scena è identico sui due assi: H/H == W/W.
+        let scale = size.height / view.bounds.height
+        let insetL = view.safeAreaInsets.left * scale
+        let insetR = view.safeAreaInsets.right * scale
         return min(max(x, insetL + 16), size.width - insetR - 16)
     }
 }

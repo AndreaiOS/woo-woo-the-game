@@ -35,6 +35,8 @@ final class SKButtonNode: SKNode {
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        // touch.location(in: self) inverte tutta la catena di scale del node graph:
+        // l'hit test resta corretto anche se il bottone stesso è scalato (es. setScale(0.8)).
         guard isEnabled, let touch = touches.first,
               sprite.contains(touch.location(in: self)) else { return }
         if togglesSelectedState { setSelected(!isSelected) }
