@@ -34,8 +34,8 @@ final class PunteggiScene: SKScene {
         let bg = SKSpriteNode(imageNamed: "splashscreeniPhone5")
         bg.position = CGPoint(x: size.width / 2, y: size.height / 2)
         bg.setScale(size.width / bg.size.width)
-        bg.color = SKColor(red: 200/255, green: 200/255, blue: 200/255, alpha: 1)
-        bg.colorBlendFactor = 1.0
+        bg.color = .black                          // CCSprite setColor:ccc3(200,200,200) = multiply ×0.784
+        bg.colorBlendFactor = 1.0 - 200.0 / 255.0  // LERP verso nero ≡ moltiplicazione su grigio uniforme
         addChild(bg)
 
         // Titolo :52-65  Moon Flower Bold 60 giallo (0.70, 0.90)

@@ -22,8 +22,8 @@ final class GameOverScene: SKScene {
         let bg = SKSpriteNode(imageNamed: "splashscreeniPhone5")
         bg.position = CGPoint(x: size.width / 2, y: size.height / 2)
         bg.setScale(size.width / bg.size.width)
-        bg.color = SKColor(red: 200/255, green: 200/255, blue: 200/255, alpha: 1)
-        bg.colorBlendFactor = 1.0                                  // :28
+        bg.color = .black                          // CCSprite setColor:ccc3(200,200,200) = multiply ×0.784
+        bg.colorBlendFactor = 1.0 - 200.0 / 255.0  // LERP verso nero ≡ moltiplicazione su grigio uniforme :28
         addChild(bg)
 
         // Statistiche PRIMA del check record (ordine originale :78-83)

@@ -19,8 +19,8 @@ final class SelfieScene: SKScene {
         let bg = SKSpriteNode(imageNamed: "bkg_cielo")
         bg.position = CGPoint(x: size.width / 2, y: size.height / 2)
         bg.setScale(size.width / bg.size.width)
-        bg.color = SKColor(red: 200/255, green: 200/255, blue: 200/255, alpha: 1)   // :37 ccc3(200,200,200)
-        bg.colorBlendFactor = 1.0
+        bg.color = .black                          // CCSprite setColor:ccc3(200,200,200) = multiply ×0.784
+        bg.colorBlendFactor = 1.0 - 200.0 / 255.0  // LERP verso nero ≡ moltiplicazione su grigio uniforme
         addChild(bg)
 
         let back = SKButtonNode(imageNamed: "btn_chiudi")
@@ -116,13 +116,34 @@ final class SelfieScene: SKScene {
         UIApplication.shared.keyRootViewController?.present(vc, animated: true)
     }
 
-    /// Foto + cornice → UIImage (sostituisce convertSpriteToImage/CCRenderTexture :418-429).
-    /// Cattura la regione che unisce foto e cornice direttamente dalla scena renderizzata.
+    /// Foto + cornice compositate OFFSCREEN (come il CCRenderTexture originale :418-429):
+    /// nessun nodo UI della scena finisce nell'immagine.
+    /// TODO Task 17: tarare a vista crop/scala foto vs cornice su device reale.
     private func compositeImage() -> UIImage? {
-        guard let view, photoNode != nil else { return nil }
-        let region = (photoNode?.calculateAccumulatedFrame() ?? .zero).union(overlayNode?.calculateAccumulatedFrame() ?? .zero)
-        guard let texture = view.texture(from: self, crop: region) else { return nil }
-        return UIImage(cgImage: texture.cgImage())
+        guard let photo = lastImage else { return nil }
+        let canvas = UIImage(named: currentCanvas)
+        let outSize = canvas?.size ?? photo.size
+        let renderer = UIGraphicsImageRenderer(size: outSize)
+        return renderer.image { ctx in
+            let photoRect = Self.aspectFillRect(content: photo.size, into: outSize)
+            if flipped {
+                ctx.cgContext.translateBy(x: outSize.width, y: 0)
+                ctx.cgContext.scaleBy(x: -1, y: 1)
+            }
+            photo.draw(in: photoRect)
+            if flipped {
+                ctx.cgContext.scaleBy(x: -1, y: 1)
+                ctx.cgContext.translateBy(x: -outSize.width, y: 0)
+            }
+            canvas?.draw(in: CGRect(origin: .zero, size: outSize))
+        }
+    }
+
+    private static func aspectFillRect(content: CGSize, into target: CGSize) -> CGRect {
+        guard content.width > 0, content.height > 0 else { return CGRect(origin: .zero, size: target) }
+        let scale = max(target.width / content.width, target.height / content.height)
+        let w = content.width * scale, h = content.height * scale
+        return CGRect(x: (target.width - w) / 2, y: (target.height - h) / 2, width: w, height: h)
     }
 
     private func showCameraDeniedAlertIfNeeded() {
