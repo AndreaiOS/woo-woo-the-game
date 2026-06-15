@@ -1,26 +1,95 @@
 import SpriteKit
+import GameKit
 
-/// STUB — game over (figlia/mamma) con punteggio, riscritto in un task successivo. Tap → IntroScene.
+/// Game over unificata (figlia/mamma). Port di GameOverScene.m + GameOverSceneMamma.m
+/// (duplicate al 90%): l'unica differenza erano i metodi `_mamma` del singleton, la scena
+/// di rigioca (MyScene/MyScene2) e la scena punteggi — tutto parametrizzato su `mode`.
+/// AdMob/Analytics rimossi: nell'originale i bottoni restavano disabilitati fino al
+/// caricamento dell'interstitial o al timeout di 15s (:128-166); senza ads li abilitiamo subito.
 final class GameOverScene: SKScene {
     private let mode: GameMode
     private let score: Int
+    private let scoreStore = ScoreStore()
 
     init(size: CGSize, mode: GameMode, score: Int) {
         self.mode = mode
         self.score = score
         super.init(size: size)
     }
-    required init?(coder: NSCoder) { fatalError("init(coder:) non supportato") }
+    required init?(coder: NSCoder) { fatalError() }
 
     override func didMove(to view: SKView) {
-        backgroundColor = .black
-        let label = SKLabelNode(text: "GameOverScene (stub) [\(mode)] score=\(score) — tap to go back")
-        label.fontSize = 22
-        label.position = CGPoint(x: size.width / 2, y: size.height / 2)
+        let bg = SKSpriteNode(imageNamed: "splashscreeniPhone5")
+        bg.position = CGPoint(x: size.width / 2, y: size.height / 2)
+        bg.setScale(size.width / bg.size.width)
+        bg.color = SKColor(red: 200/255, green: 200/255, blue: 200/255, alpha: 1)
+        bg.colorBlendFactor = 1.0                                  // :28
+        addChild(bg)
+
+        // Statistiche PRIMA del check record (ordine originale :78-83)
+        scoreStore.addGamePlayed(for: mode)
+        scoreStore.addTotalPoints(score, for: mode)
+        let gamesPlayed = scoreStore.gamesPlayed(for: mode)        // POST-incremento, come :243 letto dopo :78
+        let isRecord = scoreStore.best(for: mode) < score          // :81
+        if isRecord { scoreStore.setBest(score, for: mode) }
+
+        let label = SKLabelNode(fontNamed: GameConfig.fontName)
+        label.text = "Hai colpito\n\(score) gabbiani "             // :37 (testo esatto)
+        label.numberOfLines = 2
+        label.fontSize = 50; label.fontColor = .white
+        label.position = norm(0.70, 0.55)
         addChild(label)
+
+        if isRecord {                                              // :81-90
+            let record = SKLabelNode(fontNamed: GameConfig.fontName)
+            record.text = "Nuovo record!! "
+            record.fontSize = 50; record.fontColor = .white
+            record.position = norm(0.70, 0.30)
+            addChild(record)
+        }
+
+        buildButtons()
+
+        if GameCenterService.shared.isAuthenticated {              // :102-110
+            GameCenterService.shared.submit(score: score, mode: mode)
+            GameCenterService.shared.report(achievementIDs:
+                AchievementRules.achievements(score: score, gamesPlayed: gamesPlayed))
+        }
     }
 
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        go(to: IntroScene(size: size), .quick)
+    private func buildButtons() {   // posizioni :43-77; abilitati subito (ads rimossi)
+        let back = SKButtonNode(imageNamed: "btn_chiudi")
+        back.position = CGPoint(x: safeX(norm(0.05, 0).x), y: norm(0, 0.10).y)
+        back.action = { [weak self] in
+            guard let self else { return }
+            self.go(to: IntroScene(size: self.size), .quick)
+        }
+        addChild(back)
+
+        let punteggi = SKButtonNode(imageNamed: "btn_label", title: "Punteggi")
+        punteggi.position = norm(0.70, 0.10)
+        punteggi.action = { [weak self] in
+            guard let self else { return }
+            self.go(to: PunteggiScene(size: self.size, mode: self.mode), .quick)
+        }
+        addChild(punteggi)
+
+        let medaglie = SKButtonNode(imageNamed: "btn_label", title: "Medaglie")
+        medaglie.position = norm(0.30, 0.10)
+        medaglie.action = { [weak self] in
+            guard let self else { return }
+            GameCenterService.shared.showPanel(.achievements, mode: self.mode)   // FIRMA NUOVA
+        }
+        addChild(medaglie)
+
+        let rigioca = SKButtonNode(imageNamed: "btn_rotate_right")
+        rigioca.position = CGPoint(x: safeX(norm(0.95, 0).x), y: norm(0, 0.10).y)
+        rigioca.action = { [weak self] in
+            guard let self else { return }
+            let next: SKScene = self.mode == .figlia
+                ? GameScene(size: self.size) : GameSceneMamma(size: self.size)
+            self.go(to: next, .quick)
+        }
+        addChild(rigioca)
     }
 }
