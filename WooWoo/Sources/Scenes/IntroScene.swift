@@ -28,11 +28,13 @@ final class IntroScene: SKScene {
 
         let isIT = Locale.current.language.languageCode?.identifier == "it"
 
-        // Start Mamma → GameSceneMamma, push left 0.7 (IntroScene.m:344-348)
-        addButton("Start Mamma", at: norm(0.30, 0.60)) { [weak self] in
-            guard let self else { return }
-            self.go(to: GameSceneMamma(size: self.size), .pushLeft(0.7))
-        }
+        // Nascosto su richiesta: modalità Mamma non esposta nel menu.
+        // (GameSceneMamma resta nel codice; per riattivarla scommentare.)
+        // // Start Mamma → GameSceneMamma, push left 0.7 (IntroScene.m:344-348)
+        // addButton("Start Mamma", at: norm(0.30, 0.60)) { [weak self] in
+        //     guard let self else { return }
+        //     self.go(to: GameSceneMamma(size: self.size), .pushLeft(0.7))
+        // }
         // Start → TutorialScene, push left 0.7 (IntroScene.m:338-342)
         addButton("Start", at: norm(0.70, 0.60)) { [weak self] in
             guard let self else { return }
@@ -43,25 +45,27 @@ final class IntroScene: SKScene {
             guard let self else { return }
             self.go(to: PunteggiScene(size: self.size, mode: .figlia), .quick)
         }
-        // Punteggi Mamma → PunteggiScene .mamma, transizione "quick" (IntroScene.m:358-363)
-        addButton(isIT ? "Punteggi Mamma" : "Score records Mother", at: norm(0.30, 0.45)) { [weak self] in
-            guard let self else { return }
-            self.go(to: PunteggiScene(size: self.size, mode: .mamma), .quick)
-        }
+        // Nascosto su richiesta: classifica modalità Mamma non esposta nel menu.
+        // // Punteggi Mamma → PunteggiScene .mamma, transizione "quick" (IntroScene.m:358-363)
+        // addButton(isIT ? "Punteggi Mamma" : "Score records Mother", at: norm(0.30, 0.45)) { [weak self] in
+        //     guard let self else { return }
+        //     self.go(to: PunteggiScene(size: self.size, mode: .mamma), .quick)
+        // }
         // Woowoo Selfie → SelfieScene, transizione "quick" (IntroScene.m:365-369)
         addButton("Woowoo Selfie", at: norm(0.70, 0.30)) { [weak self] in
             guard let self else { return }
             self.go(to: SelfieScene(size: self.size), .quick)
         }
 
-        let store = SKButtonNode(imageNamed: "btn_store")
-        store.position = norm(0.52, 0.15)
-        store.action = {                          // IntroScene.m:249-258
-            if let url = URL(string: "http://bit.ly/woowoostore") {
-                UIApplication.shared.open(url)
-            }
-        }
-        addChild(store)
+        // Nascosto su richiesta: pulsante Store non esposto.
+        // let store = SKButtonNode(imageNamed: "btn_store")
+        // store.position = norm(0.52, 0.15)
+        // store.action = {                          // IntroScene.m:249-258
+        //     if let url = URL(string: "http://bit.ly/woowoostore") {
+        //         UIApplication.shared.open(url)
+        //     }
+        // }
+        // addChild(store)
 
         audioButton = toggle("btn_audioON", "btn_audioOFF", at: norm(0.61, 0.15)) { [weak self] on in
             self?.settings.isAudioOn = on
