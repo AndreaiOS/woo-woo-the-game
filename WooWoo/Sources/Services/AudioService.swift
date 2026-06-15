@@ -12,10 +12,40 @@ final class AudioService {
     private var musicPlayer: AVAudioPlayer?
     private var effectPool: [String: [AVAudioPlayer]] = [:]
     private let maxVoicesPerEffect = 4
+    private var wasPlayingMusic = false
 
     private init() {
         try? AVAudioSession.sharedInstance().setCategory(.ambient)
         try? AVAudioSession.sharedInstance().setActive(true)
+        // Spec "Gestione errori": interruzioni audio (telefonate, Siri) → pausa/ripresa pulite.
+        // La notification con `queue: .main` arriva sul main thread; AudioService è @MainActor
+        // → assumeIsolated è sicuro (stesso pattern usato altrove nel progetto).
+        // Estraggo i raw value (UInt, Sendable) dalla Notification *fuori* dall'hop @MainActor:
+        // così la Notification (non-Sendable) non attraversa il confine di isolamento (Swift 6).
+        NotificationCenter.default.addObserver(
+            forName: AVAudioSession.interruptionNotification, object: nil, queue: .main
+        ) { [weak self] note in
+            let info = note.userInfo
+            let typeRaw = info?[AVAudioSessionInterruptionTypeKey] as? UInt
+            let optionRaw = info?[AVAudioSessionInterruptionOptionKey] as? UInt
+            MainActor.assumeIsolated { self?.handleInterruption(typeRaw: typeRaw, optionRaw: optionRaw) }
+        }
+    }
+
+    private func handleInterruption(typeRaw: UInt?, optionRaw: UInt?) {
+        guard let typeRaw, let type = AVAudioSession.InterruptionType(rawValue: typeRaw) else { return }
+        switch type {
+        case .began:
+            break // il sistema ha già messo in pausa l'audio; wasPlayingMusic conserva lo stato
+        case .ended:
+            let opts = optionRaw.map(AVAudioSession.InterruptionOptions.init(rawValue:)) ?? []
+            if opts.contains(.shouldResume), wasPlayingMusic {
+                try? AVAudioSession.sharedInstance().setActive(true)
+                musicPlayer?.play()
+            }
+        @unknown default:
+            break
+        }
     }
 
     func playMusic(_ name: String, volume: Float = 1.0, loop: Bool = true) {
@@ -25,9 +55,10 @@ final class AudioService {
         musicPlayer?.numberOfLoops = loop ? -1 : 0
         musicPlayer?.volume = volume
         musicPlayer?.play()
+        wasPlayingMusic = true
     }
 
-    func stopMusic() { musicPlayer?.stop(); musicPlayer = nil }
+    func stopMusic() { musicPlayer?.stop(); musicPlayer = nil; wasPlayingMusic = false }
 
     func playEffect(_ name: String) {
         guard settings.isSoundOn,
