@@ -10,18 +10,15 @@ targets:
     sources:
       - Sources
       - Resources
-    # Capability Game Center: senza questo entitlement GKLocalPlayer.authenticate fallisce
-    # anche con device loggato a Game Center (isAuthenticated resta false).
-    # XcodeGen genera il file .entitlements e imposta CODE_SIGN_ENTITLEMENTS.
-    entitlements:
-      path: Sources/App/WooWoo.entitlements
-      properties:
-        com.apple.developer.game-center: true
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.woowoothegame
         TARGETED_DEVICE_FAMILY: "1"
         INFOPLIST_FILE: Sources/App/Info.plist
+        # Entitlements = file sorgente VERSIONATO (non generato): contiene la capability
+        # Game Center. Versionarlo evita il fallimento "WooWoo.entitlements could not be
+        # opened" quando si builda senza rilanciare xcodegen.
+        CODE_SIGN_ENTITLEMENTS: Sources/App/WooWoo.entitlements
         SWIFT_VERSION: "6.0"
         CODE_SIGN_STYLE: Automatic
         SUPPORTED_INTERFACE_ORIENTATIONS: "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
