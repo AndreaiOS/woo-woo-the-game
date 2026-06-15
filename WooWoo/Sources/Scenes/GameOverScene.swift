@@ -36,6 +36,7 @@ final class GameOverScene: SKScene {
         let label = SKLabelNode(fontNamed: GameConfig.fontName)
         label.text = "Hai colpito\n\(score) gabbiani "             // :37 (testo esatto)
         label.numberOfLines = 2
+        label.preferredMaxLayoutWidth = size.width * 0.6          // serve per il wrap su \n in SKLabelNode
         label.fontSize = 50; label.fontColor = .white
         label.position = norm(0.70, 0.55)
         addChild(label)
