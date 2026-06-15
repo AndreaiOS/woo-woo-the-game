@@ -1,4 +1,5 @@
 import GameKit
+import UIKit
 
 /// Pannello Game Center da mostrare — enum locale per evitare di esporre
 /// GKGameCenterViewControllerState (da header deprecato in iOS 26) nella firma pubblica.
@@ -57,7 +58,14 @@ final class GameCenterService {
     /// trigger(leaderboardID:playerScope:timeScope:) richiede iOS 18; su iOS 17 si
     /// ricade su trigger(state: .leaderboards) che mostra la classifica di default.
     func showPanel(_ panel: GameCenterPanel, mode: GameMode) {
-        guard isAuthenticated else { return }
+        // Prima il no-op silenzioso nascondeva il problema: se non autenticato i bottoni
+        // "Punteggi"/"Medaglie" sembravano non fare niente. Ora il caso è visibile e
+        // ritenta l'autenticazione (es. simulatore/device non loggato a Game Center).
+        guard isAuthenticated else {
+            authenticate()
+            presentNotAuthenticatedAlert()
+            return
+        }
         let ap = GKAccessPoint.shared
         switch panel {
         case .leaderboards:
@@ -74,5 +82,19 @@ final class GameCenterService {
             // trigger(state:handler:) — iOS 14+
             ap.trigger(state: .achievements) {}
         }
+    }
+
+    /// Feedback quando Game Center non è disponibile (non loggato): l'originale degradava
+    /// in silenzio, ma in test sembrava un bug ("i bottoni non fanno niente").
+    private func presentNotAuthenticatedAlert() {
+        let isIT = Locale.current.language.languageCode?.identifier == "it"
+        let alert = UIAlertController(
+            title: isIT ? "Game Center" : "Game Center",
+            message: isIT
+                ? "Accedi a Game Center (Impostazioni › Game Center) per vedere classifiche e medaglie."
+                : "Sign in to Game Center (Settings › Game Center) to view leaderboards and achievements.",
+            preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        UIApplication.shared.keyRootViewController?.present(alert, animated: true)
     }
 }

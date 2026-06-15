@@ -64,7 +64,12 @@ final class GameScene: SKScene, @MainActor SKPhysicsContactDelegate {
         let left = SKAction.move(to: CGPoint(x: -size.width, y: size.height / 2), duration: GameConfig.cloudCycleDuration)
         let right = SKAction.move(to: CGPoint(x: size.width * 2, y: size.height / 2), duration: GameConfig.cloudCycleDuration)
         nuvole.run(.repeatForever(.sequence([left, right])))                   // :70-73
-        addChild(fullWidth("bkg_palazzi"))                                     // :75-77
+        // Palazzi alzati su richiesta: nell'originale erano centrati a height/2 (troppo in basso).
+        // Tweak puramente visivo (NON un valore del port 1:1) — regola palazziYOffset per affinare.
+        let palazziYOffset: CGFloat = 40
+        let palazzi = fullWidth("bkg_palazzi")                                 // :75-77
+        palazzi.position.y += palazziYOffset
+        addChild(palazzi)
         addChild(fullWidth("bkg_terrazzo", anchorBottom: true))               // :79-81
     }
 
