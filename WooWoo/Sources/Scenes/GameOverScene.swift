@@ -38,6 +38,7 @@ final class GameOverScene: SKScene {
         label.numberOfLines = 2
         label.preferredMaxLayoutWidth = size.width * 0.6          // serve per il wrap su \n in SKLabelNode
         label.fontSize = 50; label.fontColor = .white
+        label.verticalAlignmentMode = .center                     // CCLabelTTF anchor (0.5,0.5); default SKLabelNode è .baseline
         label.position = norm(0.70, 0.55)
         addChild(label)
 
@@ -45,6 +46,7 @@ final class GameOverScene: SKScene {
             let record = SKLabelNode(fontNamed: GameConfig.fontName)
             record.text = "Nuovo record!! "
             record.fontSize = 50; record.fontColor = .white
+            record.verticalAlignmentMode = .center                 // come sopra: centrato verticale per parità con l'originale
             record.position = norm(0.70, 0.30)
             addChild(record)
         }

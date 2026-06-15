@@ -100,8 +100,10 @@ final class PunteggiScene: SKScene {
         addChild(cestino)
     }
 
-    /// Aggiunge una SKLabelNode centrata orizzontalmente sul punto (come CCLabelTTF con
-    /// CCPositionTypeNormalized che usa anchor point (0.5, 0.5)).
+    /// Aggiunge una SKLabelNode centrata sul punto, per replicare l'anchor (0.5, 0.5) di
+    /// CCLabelTTF (CCPositionTypeNormalized). Impostiamo `.center` orizzontale — ridondante
+    /// perché è già il default orizzontale di SKLabelNode, ma esplicito — e `.center`
+    /// verticale, che invece è necessario (il default verticale è `.baseline`, non centrato).
     private func addLabel(_ text: String, _ font: String, _ fontSize: CGFloat,
                           _ color: SKColor, _ position: CGPoint) {
         let label = SKLabelNode(fontNamed: font)

@@ -282,6 +282,7 @@ final class GameSceneMamma: SKScene, @MainActor SKPhysicsContactDelegate {
                 self?.movableSprites.removeAll { $0 === monster }
             }]), withKey: "path")                                    // :966
         }
+        // looper (amico/bonus) rimossi solo dal tocco del dito (fedele a MyScene2.m); l'array è limitato in pratica dal game-over a 9 colpi
         movableSprites.append(monster)                              // :644/:808/:967
     }
 
