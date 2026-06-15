@@ -53,6 +53,9 @@ final class GameOverScene: SKScene {
 
         buildButtons()
 
+        // Miglioramento voluto vs originale: l'originale (:103) inviava solo se
+        // getLeaderBoardIdentifier era già impostato (dopo aver visitato Punteggi);
+        // qui mode.leaderboardID è sempre valido, quindi inviamo sempre se autenticati.
         if GameCenterService.shared.isAuthenticated {              // :102-110
             GameCenterService.shared.submit(score: score, mode: mode)
             GameCenterService.shared.report(achievementIDs:
