@@ -68,21 +68,22 @@ final class IntroScene: SKScene {
         // }
         // addChild(store)
 
-        audioButton = toggle("btn_audioON", "btn_audioOFF", at: norm(0.61, 0.15)) { [weak self] on in
+        // Riga inferiore ri-centrata attorno a 0.70 (era sbilanciata a destra dopo la rimozione dello Store).
+        audioButton = toggle("btn_audioON", "btn_audioOFF", at: norm(0.565, 0.15)) { [weak self] on in
             self?.settings.isAudioOn = on
             if on { AudioService.shared.playEffect("music_on.mp3") }   // IntroScene.m:261-272
         }
-        soundButton = toggle("btn_soundON", "btn_soundOFF", at: norm(0.70, 0.15)) { [weak self] on in
+        soundButton = toggle("btn_soundON", "btn_soundOFF", at: norm(0.655, 0.15)) { [weak self] on in
             self?.settings.isSoundOn = on
             if on { AudioService.shared.playEffect("woowoo.mp3") }     // IntroScene.m:274-285
         }
-        vibroButton = toggle("btn_vibroON", "btn_vibroOFF", at: norm(0.79, 0.15)) { [weak self] on in
+        vibroButton = toggle("btn_vibroON", "btn_vibroOFF", at: norm(0.745, 0.15)) { [weak self] on in
             self?.settings.isVibroOn = on
             if on { UINotificationFeedbackGenerator().notificationOccurred(.warning) }  // IntroScene.m:287-297
         }
 
         let info = SKButtonNode(imageNamed: "btn_crediti")
-        info.position = norm(0.88, 0.15)
+        info.position = norm(0.835, 0.15)
         info.action = { [weak self] in self?.showCredits(isIT: isIT) }   // IntroScene.m:299-336
         addChild(info)
     }
