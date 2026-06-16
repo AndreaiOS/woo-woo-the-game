@@ -7,4 +7,11 @@ final class SmokeTests: XCTestCase {
         XCTAssertEqual(size.height, 320)
         XCTAssertEqual(size.width, 694, accuracy: 1)
     }
+
+    @MainActor
+    func testAchievementToastNodeBuilds() {
+        let a = AchievementCatalog.with(id: "combo_5")!
+        let node = AchievementToastNode(a)
+        XCTAssertFalse(node.children.isEmpty)   // plate + medal + 2 label
+    }
 }
