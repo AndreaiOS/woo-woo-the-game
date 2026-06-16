@@ -83,7 +83,7 @@ final class PunteggiScene: SKScene {
         medaglie.position = norm(0.30, 0.10)
         medaglie.action = { [weak self] in
             guard let self else { return }
-            GameCenterService.shared.showPanel(.achievements, mode: self.mode)
+            self.go(to: AchievementsScene(size: self.size), .quick)
         }
         addChild(medaglie)
 

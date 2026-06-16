@@ -12,6 +12,9 @@ build/
 # macOS
 .DS_Store
 
+# Superpowers brainstorming companion (mockups)
+.superpowers/
+
 # Swift Package Manager
 .build/
 .swiftpm/

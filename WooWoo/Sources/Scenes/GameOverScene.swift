@@ -9,11 +9,13 @@ import GameKit
 final class GameOverScene: SKScene {
     private let mode: GameMode
     private let score: Int
+    private let inGameUnlocks: [Achievement]
     private let scoreStore = ScoreStore()
 
-    init(size: CGSize, mode: GameMode, score: Int) {
+    init(size: CGSize, mode: GameMode, score: Int, inGameUnlocks: [Achievement] = []) {
         self.mode = mode
         self.score = score
+        self.inGameUnlocks = inGameUnlocks
         super.init(size: size)
     }
     required init?(coder: NSCoder) { fatalError() }
@@ -29,9 +31,12 @@ final class GameOverScene: SKScene {
         // Statistiche PRIMA del check record (ordine originale :78-83)
         scoreStore.addGamePlayed(for: mode)
         scoreStore.addTotalPoints(score, for: mode)
-        let gamesPlayed = scoreStore.gamesPlayed(for: mode)        // POST-incremento, come :243 letto dopo :78
         let isRecord = scoreStore.best(for: mode) < score          // :81
         if isRecord { scoreStore.setBest(score, for: mode) }
+
+        // Achievement di carriera (ScoreStore già aggiornato sopra) + quelli accumulati in partita.
+        let careerUnlocks = AchievementService.shared.onGameEnd(mode: mode)
+        let recap = inGameUnlocks + careerUnlocks
 
         let label = SKLabelNode(fontNamed: GameConfig.fontName)
         label.text = "Hai colpito\n\(score) gabbiani "             // :37 (testo esatto)
@@ -53,13 +58,35 @@ final class GameOverScene: SKScene {
 
         buildButtons()
 
-        // Miglioramento voluto vs originale: l'originale (:103) inviava solo se
-        // getLeaderBoardIdentifier era già impostato (dopo aver visitato Punteggi);
-        // qui mode.leaderboardID è sempre valido, quindi inviamo sempre se autenticati.
-        if GameCenterService.shared.isAuthenticated {              // :102-110
+        // Punteggio in classifica come prima. Gli achievement sono ora gestiti dal nuovo
+        // AchievementService (recap aggiunto nel task di integrazione GameScene/GameOverScene).
+        if GameCenterService.shared.isAuthenticated {
             GameCenterService.shared.submit(score: score, mode: mode)
-            GameCenterService.shared.report(achievementIDs:
-                AchievementRules.achievements(score: score, gamesPlayed: gamesPlayed))
+        }
+
+        buildRecap(recap)
+    }
+
+    /// Lista compatta degli achievement sbloccati in questa partita (vuota → niente).
+    private func buildRecap(_ achievements: [Achievement]) {
+        guard !achievements.isEmpty else { return }
+        let header = SKLabelNode(fontNamed: GameConfig.fontNameBold)
+        header.text = achievements.count == 1 ? "Achievement sbloccato!" : "Achievement sbloccati!"
+        header.fontSize = 16
+        header.fontColor = .yellow
+        header.verticalAlignmentMode = .center
+        header.position = norm(0.30, 0.62)
+        addChild(header)
+
+        for (i, a) in achievements.prefix(4).enumerated() {
+            let row = SKLabelNode(fontNamed: GameConfig.fontName)
+            row.text = "• \(a.title)"
+            row.fontSize = 13
+            row.fontColor = a.rarity.medalColor
+            row.verticalAlignmentMode = .center
+            row.horizontalAlignmentMode = .center
+            row.position = norm(0.30, 0.52 - CGFloat(i) * 0.08)
+            addChild(row)
         }
     }
 
@@ -84,7 +111,7 @@ final class GameOverScene: SKScene {
         medaglie.position = norm(0.30, 0.10)
         medaglie.action = { [weak self] in
             guard let self else { return }
-            GameCenterService.shared.showPanel(.achievements, mode: self.mode)   // FIRMA NUOVA
+            self.go(to: AchievementsScene(size: self.size), .quick)
         }
         addChild(medaglie)
 
