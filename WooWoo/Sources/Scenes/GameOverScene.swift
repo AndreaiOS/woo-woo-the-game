@@ -29,7 +29,6 @@ final class GameOverScene: SKScene {
         // Statistiche PRIMA del check record (ordine originale :78-83)
         scoreStore.addGamePlayed(for: mode)
         scoreStore.addTotalPoints(score, for: mode)
-        let gamesPlayed = scoreStore.gamesPlayed(for: mode)        // POST-incremento, come :243 letto dopo :78
         let isRecord = scoreStore.best(for: mode) < score          // :81
         if isRecord { scoreStore.setBest(score, for: mode) }
 
@@ -53,13 +52,10 @@ final class GameOverScene: SKScene {
 
         buildButtons()
 
-        // Miglioramento voluto vs originale: l'originale (:103) inviava solo se
-        // getLeaderBoardIdentifier era già impostato (dopo aver visitato Punteggi);
-        // qui mode.leaderboardID è sempre valido, quindi inviamo sempre se autenticati.
-        if GameCenterService.shared.isAuthenticated {              // :102-110
+        // Punteggio in classifica come prima. Gli achievement sono ora gestiti dal nuovo
+        // AchievementService (recap aggiunto nel task di integrazione GameScene/GameOverScene).
+        if GameCenterService.shared.isAuthenticated {
             GameCenterService.shared.submit(score: score, mode: mode)
-            GameCenterService.shared.report(achievementIDs:
-                AchievementRules.achievements(score: score, gamesPlayed: gamesPlayed))
         }
     }
 
