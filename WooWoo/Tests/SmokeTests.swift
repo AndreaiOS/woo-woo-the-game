@@ -14,4 +14,10 @@ final class SmokeTests: XCTestCase {
         let node = AchievementToastNode(a)
         XCTAssertFalse(node.children.isEmpty)   // plate + medal + 2 label
     }
+
+    @MainActor
+    func testAchievementsSceneBuilds() {
+        let scene = AchievementsScene(size: CGSize(width: 694, height: 320))
+        XCTAssertNotNil(scene)
+    }
 }
