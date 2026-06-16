@@ -9,11 +9,13 @@ import GameKit
 final class GameOverScene: SKScene {
     private let mode: GameMode
     private let score: Int
+    private let inGameUnlocks: [Achievement]
     private let scoreStore = ScoreStore()
 
-    init(size: CGSize, mode: GameMode, score: Int) {
+    init(size: CGSize, mode: GameMode, score: Int, inGameUnlocks: [Achievement] = []) {
         self.mode = mode
         self.score = score
+        self.inGameUnlocks = inGameUnlocks
         super.init(size: size)
     }
     required init?(coder: NSCoder) { fatalError() }
@@ -31,6 +33,10 @@ final class GameOverScene: SKScene {
         scoreStore.addTotalPoints(score, for: mode)
         let isRecord = scoreStore.best(for: mode) < score          // :81
         if isRecord { scoreStore.setBest(score, for: mode) }
+
+        // Achievement di carriera (ScoreStore già aggiornato sopra) + quelli accumulati in partita.
+        let careerUnlocks = AchievementService.shared.onGameEnd(mode: mode)
+        let recap = inGameUnlocks + careerUnlocks
 
         let label = SKLabelNode(fontNamed: GameConfig.fontName)
         label.text = "Hai colpito\n\(score) gabbiani "             // :37 (testo esatto)
@@ -56,6 +62,31 @@ final class GameOverScene: SKScene {
         // AchievementService (recap aggiunto nel task di integrazione GameScene/GameOverScene).
         if GameCenterService.shared.isAuthenticated {
             GameCenterService.shared.submit(score: score, mode: mode)
+        }
+
+        buildRecap(recap)
+    }
+
+    /// Lista compatta degli achievement sbloccati in questa partita (vuota → niente).
+    private func buildRecap(_ achievements: [Achievement]) {
+        guard !achievements.isEmpty else { return }
+        let header = SKLabelNode(fontNamed: GameConfig.fontNameBold)
+        header.text = achievements.count == 1 ? "Achievement sbloccato!" : "Achievement sbloccati!"
+        header.fontSize = 16
+        header.fontColor = .yellow
+        header.verticalAlignmentMode = .center
+        header.position = norm(0.30, 0.62)
+        addChild(header)
+
+        for (i, a) in achievements.prefix(4).enumerated() {
+            let row = SKLabelNode(fontNamed: GameConfig.fontName)
+            row.text = "• \(a.title)"
+            row.fontSize = 13
+            row.fontColor = a.rarity.medalColor
+            row.verticalAlignmentMode = .center
+            row.horizontalAlignmentMode = .center
+            row.position = norm(0.30, 0.52 - CGFloat(i) * 0.08)
+            addChild(row)
         }
     }
 

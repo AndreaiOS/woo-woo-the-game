@@ -31,6 +31,9 @@ final class GameScene: SKScene, @MainActor SKPhysicsContactDelegate {
     private var scoreLabel: SKLabelNode!
     private var timeLabel: SKLabelNode!
     private var accelerometerActive = false
+    private var streak = 0
+    private var sessionUnlocks: [Achievement] = []
+    private lazy var toasts = AchievementToastPresenter(scene: self)
 
     override func didMove(to view: SKView) {
         physicsWorld.gravity = .zero                       // :55
@@ -159,6 +162,8 @@ final class GameScene: SKScene, @MainActor SKPhysicsContactDelegate {
                 guard let self else { return }
                 self.time += 0.1                            // :565
                 self.timeLabel.text = ScoreFormatter.time(self.time)
+                let unlocked = AchievementService.shared.onTick(survival: self.time)
+                if !unlocked.isEmpty { self.sessionUnlocks += unlocked; self.toasts.enqueue(unlocked) }
             }
         }
         RunLoop.current.add(t, forMode: .common)            // :857 NSRunLoopCommonModes
@@ -315,11 +320,13 @@ final class GameScene: SKScene, @MainActor SKPhysicsContactDelegate {
         case PhysicsCategory.player | PhysicsCategory.gabbiano,    // :570-578
              PhysicsCategory.player | PhysicsCategory.fuoco:       // :625-634
             colpiMostro += 1
+            streak = 0
             if colpiMostro <= GameConfig.maxColpi { player.colpita() }
             controllaVita()
         case PhysicsCategory.mamma | PhysicsCategory.gabbiano:     // :580-588
             mamma.soffre()
             colpiMostro += 1
+            streak = 0
             if colpiMostro <= GameConfig.maxColpi { controllaVita() }
         case PhysicsCategory.colpi | PhysicsCategory.gabbiano:     // :594-601
             if let g = node(PhysicsCategory.gabbiano) as? GabbianoNode { valutaColpo(g) }
@@ -330,6 +337,9 @@ final class GameScene: SKScene, @MainActor SKPhysicsContactDelegate {
                 punteggio += 1                              // :615
                 scoreLabel.text = ScoreFormatter.hits(punteggio)   // :617
                 AudioService.shared.playEffect("con_la_scopa.mp3") // :620
+                streak += 1
+                let unlocked = AchievementService.shared.onKill(score: punteggio, streak: streak)
+                if !unlocked.isEmpty { sessionUnlocks += unlocked; toasts.enqueue(unlocked) }
             }
         default: break
         }
@@ -363,7 +373,8 @@ final class GameScene: SKScene, @MainActor SKPhysicsContactDelegate {
         gameTimer?.invalidate()
         AudioService.shared.stopMusic()                     // :806-807
         AudioService.shared.playEffect("mai_capitato.mp3")  // :808-812
-        go(to: GameOverScene(size: size, mode: .figlia, score: punteggio), .quick)   // :784-785
+        go(to: GameOverScene(size: size, mode: .figlia, score: punteggio,
+                             inGameUnlocks: sessionUnlocks), .quick)   // :784-785
     }
 
     // MARK: - Pausa (:874-941)
