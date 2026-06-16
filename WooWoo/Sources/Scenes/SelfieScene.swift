@@ -10,6 +10,7 @@ final class SelfieScene: SKScene {
     private var frameButtons: [SKButtonNode] = []
     private var lastImage: UIImage?
     private var flipped = false
+    private lazy var toasts = AchievementToastPresenter(scene: self)
 
     private let yPositions: [CGFloat] = [0.10, 0.30, 0.50, 0.70, 0.90]
 
@@ -76,6 +77,7 @@ final class SelfieScene: SKScene {
             self.lastImage = image
             self.flipped = false
             self.showPhoto(image)
+            self.toasts.enqueue(AchievementService.shared.onSelfie())
         }
     }
 
