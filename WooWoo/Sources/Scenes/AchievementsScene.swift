@@ -43,6 +43,17 @@ final class AchievementsScene: SKScene {
         let cols = 5, rows = 3
         let x0: CGFloat = 0.12, x1: CGFloat = 0.88
         let y0: CGFloat = 0.62, y1: CGFloat = 0.24
+
+        // Pannello scuro dietro la griglia (come nel recap): fa risaltare medaglie e icone
+        // sullo sfondo. Aggiunto prima dei tile → resta dietro.
+        let panel = SKShapeNode(rectOf: CGSize(width: size.width * 0.92, height: size.height * 0.60),
+                                cornerRadius: 14)
+        panel.fillColor = SKColor(white: 0, alpha: 0.55)
+        panel.strokeColor = SKColor(white: 1, alpha: 0.20)
+        panel.lineWidth = 1
+        panel.position = norm(0.5, 0.40)
+        addChild(panel)
+
         for (i, a) in AchievementCatalog.all.enumerated() {
             let c = i % cols, r = i / cols
             let nx = x0 + (x1 - x0) * (CGFloat(c) / CGFloat(cols - 1))
