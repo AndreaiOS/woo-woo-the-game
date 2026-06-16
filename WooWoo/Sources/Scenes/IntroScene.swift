@@ -51,6 +51,11 @@ final class IntroScene: SKScene {
         //     guard let self else { return }
         //     self.go(to: PunteggiScene(size: self.size, mode: .mamma), .quick)
         // }
+        // Medaglie → AchievementsScene (galleria achievement in-app)
+        addButton(isIT ? "Medaglie" : "Achievements", at: norm(0.30, 0.45)) { [weak self] in
+            guard let self else { return }
+            self.go(to: AchievementsScene(size: self.size), .quick)
+        }
         // Woowoo Selfie → SelfieScene, transizione "quick" (IntroScene.m:365-369)
         addButton("Woowoo Selfie", at: norm(0.70, 0.30)) { [weak self] in
             guard let self else { return }
