@@ -13,6 +13,29 @@ extension AchievementRarity {
     var isMedalStyle: Bool { self == .epico }
 }
 
+extension AchievementCategory {
+    /// Icona (emoji) della categoria, mostrata dentro la medaglia.
+    var icon: String {
+        switch self {
+        case .combo:         "🔥"
+        case .punteggio:     "🎯"
+        case .sopravvivenza: "⏱️"
+        case .carriera:      "🏆"
+        case .chicche:       "⭐️"
+        }
+    }
+}
+
+/// Crea l'etichetta-emoji da centrare dentro una medaglia di raggio `r`.
+@MainActor
+func medalIconLabel(_ text: String, radius r: CGFloat) -> SKLabelNode {
+    let icon = SKLabelNode(text: text)
+    icon.fontSize = r * 1.2
+    icon.verticalAlignmentMode = .center
+    icon.horizontalAlignmentMode = .center
+    return icon
+}
+
 /// Toast singolo: cartello (comune/raro) o medaglia (epico). Si compone da btn_label + label.
 @MainActor
 final class AchievementToastNode: SKNode {
@@ -32,6 +55,10 @@ final class AchievementToastNode: SKNode {
         medal.lineWidth = 2
         medal.position = CGPoint(x: -plate.size.width * 0.36, y: 0)
         addChild(medal)
+
+        let icon = medalIconLabel(a.category.icon, radius: r)
+        icon.position = medal.position
+        addChild(icon)
 
         let title = SKLabelNode(fontNamed: GameConfig.fontNameBold)
         title.text = a.title

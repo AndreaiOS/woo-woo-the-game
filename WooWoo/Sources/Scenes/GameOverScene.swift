@@ -67,26 +67,58 @@ final class GameOverScene: SKScene {
         buildRecap(recap)
     }
 
-    /// Lista compatta degli achievement sbloccati in questa partita (vuota → niente).
+    /// Lista degli achievement sbloccati in questa partita (vuota → niente).
+    /// Pannello scuro per contrasto + mini-medaglia (colore=rarità, icona=categoria) per riga.
     private func buildRecap(_ achievements: [Achievement]) {
         guard !achievements.isEmpty else { return }
+        let shown = Array(achievements.prefix(4))
+
+        let topYN: CGFloat = 0.66
+        let headerYN: CGFloat = 0.58
+        let firstRowYN: CGFloat = 0.48
+        let stepYN: CGFloat = 0.085
+        let bottomYN = firstRowYN - stepYN * CGFloat(shown.count - 1) - 0.05
+
+        // Pannello scuro semitrasparente: fa risaltare il testo sullo sfondo.
+        let panel = SKShapeNode(rectOf: CGSize(width: size.width * 0.44,
+                                               height: size.height * (topYN - bottomYN)),
+                                cornerRadius: 10)
+        panel.fillColor = SKColor(white: 0, alpha: 0.55)
+        panel.strokeColor = SKColor(white: 1, alpha: 0.25)
+        panel.lineWidth = 1
+        panel.position = norm(0.30, (topYN + bottomYN) / 2)
+        addChild(panel)
+
         let header = SKLabelNode(fontNamed: GameConfig.fontNameBold)
-        header.text = achievements.count == 1 ? "Achievement sbloccato!" : "Achievement sbloccati!"
-        header.fontSize = 16
+        header.text = shown.count == 1 ? "Achievement sbloccato!" : "Achievement sbloccati!"
+        header.fontSize = 18
         header.fontColor = .yellow
         header.verticalAlignmentMode = .center
-        header.position = norm(0.30, 0.62)
+        header.horizontalAlignmentMode = .center
+        header.position = norm(0.30, headerYN)
         addChild(header)
 
-        for (i, a) in achievements.prefix(4).enumerated() {
-            let row = SKLabelNode(fontNamed: GameConfig.fontName)
-            row.text = "• \(a.title)"
-            row.fontSize = 13
-            row.fontColor = a.rarity.medalColor
-            row.verticalAlignmentMode = .center
-            row.horizontalAlignmentMode = .center
-            row.position = norm(0.30, 0.52 - CGFloat(i) * 0.08)
-            addChild(row)
+        for (i, a) in shown.enumerated() {
+            let y = firstRowYN - stepYN * CGFloat(i)
+            let medal = SKShapeNode(circleOfRadius: 9)
+            medal.fillColor = a.rarity.medalColor
+            medal.strokeColor = .white
+            medal.lineWidth = 1
+            medal.position = norm(0.17, y)
+            addChild(medal)
+
+            let icon = medalIconLabel(a.category.icon, radius: 9)
+            icon.position = medal.position
+            addChild(icon)
+
+            let title = SKLabelNode(fontNamed: GameConfig.fontName)
+            title.text = a.title
+            title.fontSize = 15
+            title.fontColor = .white
+            title.verticalAlignmentMode = .center
+            title.horizontalAlignmentMode = .left
+            title.position = norm(0.21, y)
+            addChild(title)
         }
     }
 
