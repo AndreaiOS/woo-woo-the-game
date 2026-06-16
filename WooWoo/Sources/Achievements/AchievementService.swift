@@ -27,8 +27,8 @@ final class AchievementService {
         evaluate { trigger in
             switch trigger {
             case .streak(let n):      return streak >= n
-            case .scoreInGame(let n): return score == n
-            case .scoreExact(let n):  return score == n
+            case .scoreInGame(let n): return score >= n   // milestone: raggiungi N
+            case .scoreExact(let n):  return score == n   // esatto: esattamente N (Niente panico)
             default:                  return false
             }
         }

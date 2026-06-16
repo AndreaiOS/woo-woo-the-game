@@ -40,10 +40,23 @@ final class AchievementServiceTests: XCTestCase {
         let again = service.onKill(score: 5, streak: 5)
         XCTAssertTrue(again.isEmpty)
     }
-    func testScoreExact42Secret() {
-        XCTAssertTrue(service.onKill(score: 41, streak: 1).isEmpty)
+    func testScoreInGameIsMilestone() {
+        // .scoreInGame è ">=": saltando a 50 sblocca sia Cacciatore(25) sia Cecchino(50).
+        let new = service.onKill(score: 50, streak: 1)
+        XCTAssertTrue(new.contains { $0.id == "score_25" })
+        XCTAssertTrue(new.contains { $0.id == "score_50" })
+    }
+    func testAnswer42IsExactNotMilestone() {
+        // .scoreExact(42) scatta esattamente a 42 (anche se a 42 scatta pure score_25, ">=").
         let at42 = service.onKill(score: 42, streak: 1)
         XCTAssertTrue(at42.contains { $0.id == "answer_42" })
+        // ...ma da stato fresco NON scatta a 43: è esatto, non ">=".
+        let d = UserDefaults(suiteName: #file + "svc43")!
+        d.removePersistentDomain(forName: #file + "svc43")
+        defer { d.removePersistentDomain(forName: #file + "svc43") }
+        let fresh = AchievementService(store: AchievementStore(defaults: d),
+                                       scoreStore: ScoreStore(defaults: d), gameCenter: SpyMirror())
+        XCTAssertFalse(fresh.onKill(score: 43, streak: 1).contains { $0.id == "answer_42" })
     }
     func testSurvival() {
         XCTAssertTrue(service.onTick(survival: 59).isEmpty)
