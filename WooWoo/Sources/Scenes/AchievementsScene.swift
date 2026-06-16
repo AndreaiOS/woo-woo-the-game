@@ -62,6 +62,10 @@ final class AchievementsScene: SKScene {
         medal.lineWidth = 2
         node.addChild(medal)
 
+        let medalIcon = medalIconLabel(a.isSecret && !unlocked ? "❓" : a.category.icon, radius: 16)
+        medalIcon.alpha = unlocked ? 1.0 : 0.55
+        node.addChild(medalIcon)
+
         let label = SKLabelNode(fontNamed: GameConfig.fontName)
         if a.isSecret && !unlocked {
             label.text = "???"
