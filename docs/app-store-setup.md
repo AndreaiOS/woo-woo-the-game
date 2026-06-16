@@ -1,6 +1,6 @@
 # App Store Connect — setup pre-lancio
 
-Gioco **nuovo** (non update). Bundle ID: `com.woowoothegame`. Versione `2.0.0` (build 1).
+Gioco **nuovo** (non update). Bundle ID: `com.woowoothegame.it`. Versione `2.0.0` (build 1).
 
 ## 1. Game Center
 

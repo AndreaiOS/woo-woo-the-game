@@ -12,7 +12,7 @@ targets:
       - Resources
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.woowoothegame
+        PRODUCT_BUNDLE_IDENTIFIER: com.woowoothegame.it
         TARGETED_DEVICE_FAMILY: "1"
         INFOPLIST_FILE: Sources/App/Info.plist
         # Entitlements = file sorgente VERSIONATO (non generato): contiene la capability
