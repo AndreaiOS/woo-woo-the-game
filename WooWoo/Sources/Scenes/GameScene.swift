@@ -188,17 +188,23 @@ final class GameScene: SKScene, @MainActor SKPhysicsContactDelegate {
         let dec = GameConfig.Figlia.accelDeceleration
         let sens = GameConfig.Figlia.accelSensitivity
         let maxV = GameConfig.Figlia.accelMaxVelocity
+        // Segni INVERTITI rispetto al port 1:1 di MyScene.m (:295-306): l'originale Cocos2D leggeva
+        // l'accelerometro via UIAccelerometer, con convenzione di segno OPPOSTA a CoreMotion
+        // (CMAccelerometerData) che usiamo qui. Replicando i segni originali il controllo risultava
+        // ribaltato su device reale (tilt a destra → la figlia va a sinistra). Corretti per CoreMotion.
+        // Bug emerso solo in produzione: l'accelerometro non è simulabile né unit-testabile.
+        // I segni restano OPPOSTI tra landscapeLeft/Right → entrambe le rotazioni restano coerenti.
         switch UIDevice.current.orientation {
         case .landscapeLeft:                                // :295-297
-            playerVelocity.x = playerVelocity.x * dec + CGFloat(data.acceleration.y) * sens
+            playerVelocity.x = playerVelocity.x * dec - CGFloat(data.acceleration.y) * sens
             comeEraGirato = true
         case .landscapeRight:                               // :299-301
-            playerVelocity.x = playerVelocity.x * dec - CGFloat(data.acceleration.y) * sens
+            playerVelocity.x = playerVelocity.x * dec + CGFloat(data.acceleration.y) * sens
             comeEraGirato = false
         default:                                            // :303-306
             playerVelocity.x = comeEraGirato
-                ? playerVelocity.x * dec + CGFloat(data.acceleration.y) * sens
-                : playerVelocity.x * dec - CGFloat(data.acceleration.y) * sens
+                ? playerVelocity.x * dec - CGFloat(data.acceleration.y) * sens
+                : playerVelocity.x * dec + CGFloat(data.acceleration.y) * sens
         }
         playerVelocity.x = min(max(playerVelocity.x, -maxV), maxV)   // :308-315
         playerVelocity.y = min(max(playerVelocity.y, -maxV), maxV)   // :318-325
