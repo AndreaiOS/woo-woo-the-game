@@ -13,9 +13,13 @@ import SpriteKit
 /// è un SKNode puro (origine = sua position, niente offset d'anchor), quindi per ottenere lo
 /// stesso risultato la X locale dev'essere localX(N) = (N - 2.5)*w e la Y = h/2 (centro verticale,
 /// non h). I 4 target di move(to:) (w, 0, -w, -2w) e la position iniziale (2w, 0) restano ESATTI.
-/// Le tutorial sono 568pt di design ma i device moderni sono più larghi: scalo ogni immagine alla
-/// larghezza della scena (come IntroScene per lo sfondo) così riempiono e tassellano senza gap.
-/// UIPageControl dell'originale → 5 pallini SKShapeNode (sostituto deciso nel piano).
+/// Le tutorial sono 568pt di design ma i device moderni sono più larghi: a differenza degli
+/// sfondi puri (IntroScene) qui il testo è disegnato DENTRO l'immagine fino a ~17pt dal bordo
+/// alto (tutorial04) e ~24pt da quello basso (tutorial05), quindi scalare alla larghezza
+/// ritaglierebbe le scritte sopra e sotto (~35pt per lato su 19.5:9). Scalo aspect-fit
+/// (= altezza sui device wide, così tutta l'arte resta visibile); le bande laterali che
+/// avanzano sono riempite dal colore di sfondo della scena (`bandColor`).
+/// UIPageControl dell'originale → 5 pallini SKShapeNode.
 final class TutorialScene: SKScene {
     private let background = SKNode()
     private var pagina = 0
@@ -32,11 +36,11 @@ final class TutorialScene: SKScene {
         background.position = CGPoint(x: size.width * 2, y: 0)
         addChild(background)
 
+        backgroundColor = TutorialScene.bandColor
+
         for i in 1...5 {
-            let img = SKSpriteNode(imageNamed: String(format: "tutorial%02d_iPhone", i))
-            img.color = SKColor(red: 200 / 255, green: 200 / 255, blue: 200 / 255, alpha: 1)
-            img.colorBlendFactor = 1.0                       // tinta ccc3(200,200,200) — :38
-            img.setScale(size.width / img.size.width)        // schermo pieno (design 568pt → device più largo)
+            let img = makePage(named: String(format: "tutorial%02d_iPhone", i))
+            img.setScale(TutorialScene.pageScale(scene: size, image: img.size))  // aspect-fit: il testo resta intero (vedi nota in testa)
             // :39-59 — X = (N-2.5)w (centro pagina ai target di gestisci_pagina), Y centrata (vedi nota in testa).
             img.position = CGPoint(x: (CGFloat(i) - 2.5) * size.width, y: size.height / 2)
             background.addChild(img)
@@ -60,6 +64,23 @@ final class TutorialScene: SKScene {
         }
         monoMovimento = false                                // :155
         updateDots()                                         // :158 (pageControl.currentPage = pagina)
+    }
+
+    /// Colore delle bande laterali: il cielo delle tavole (RGB 88,200,200) già moltiplicato
+    /// per la tinta ccc3(200,200,200) applicata alle immagini, così il raccordo è invisibile.
+    static let bandColor = SKColor(red: 30 / 255, green: 42 / 255, blue: 46 / 255, alpha: 1)
+
+    private func makePage(named name: String) -> SKSpriteNode {
+        let s = SKSpriteNode(imageNamed: name)
+        s.color = SKColor(red: 200 / 255, green: 200 / 255, blue: 200 / 255, alpha: 1)
+        s.colorBlendFactor = 1.0                             // tinta ccc3(200,200,200) — :38
+        return s
+    }
+
+    /// Aspect-fit: l'intera immagine (testo compreso) deve stare nella scena.
+    /// Sui device wide (scena 320pt di altezza, larghezza > 568) vince il rapporto in altezza.
+    static func pageScale(scene: CGSize, image: CGSize) -> CGFloat {
+        min(scene.width / image.width, scene.height / image.height)
     }
 
     private func gestisciPagina(_ p: Int) {                  // :167-202
